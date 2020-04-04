@@ -10,30 +10,30 @@ class DataDownloader:
         self.binary_data = []
         self.years_flag = 1
 
-    def download_data(self, path='http://amk030.imces.ru/meteodata/AMK_030_BIN/'):
-        res = requests.get(path)
+    def download(self, download_address='http://amk030.imces.ru/meteodata/AMK_030_BIN/'):
+        answer = requests.get(download_address)
         pattern = r"(href=\"[\d\w.%]*[\/]\")"  # Для папок
-        folders = re.findall(pattern, res.text)
+        folders = re.findall(pattern, answer.text)
 
         if folders:
             if self.years_flag:
                 self.years_flag = 0
                 for year_folder in folders:
-                    if 'T' in year_folder[6:-2]:
+                    if 'T' in year_folder[6:-2]:  # For TMP files
                         if int(year_folder[6:-2][4:]) == self.end_datetime.year:
                             print(year_folder[6:-2][4:])
-                            self.download_data(path + year_folder[6:-1])
+                            self.download(download_address + year_folder[6:-1])
                     elif self.start_datetime.year <= int(year_folder[6:-2]) <= self.end_datetime.year:
                         print(year_folder[6:-2])
-                        self.download_data(path + year_folder[6:-1])
+                        self.download(download_address + year_folder[6:-1])
             else:
                 for month_folder in folders:
                     print(month_folder[6:-1])
-                    self.download_data(path + month_folder[6:-1])
+                    self.download(download_address + month_folder[6:-1])
 
         else:
             pattern = r"(href=\"[\d\w.]*B\")"  # для файлов
-            files = re.findall(pattern, res.text)
+            files = re.findall(pattern, answer.text)
             print(len(files))
             if files:
                 for file in files:
@@ -45,14 +45,14 @@ class DataDownloader:
                         return
                     if file_date >= self.start_datetime:
                         print(file)
-                        self.binary_data.append(requests.get(path + file).content)
+                        self.binary_data.append(requests.get(download_address + file).content)
             else:
-                return print("В папке", path, "Фалов нет! ")
+                return print("В папке", download_address, "Фалов нет! ")
 
 
 if __name__ == "__main__":
     downloader = DataDownloader()
     downloader.start_datetime = datetime.strptime('15.08.2018 15:00', '%d.%m.%Y %H:%M')
     downloader.end_datetime = datetime.strptime('15.08.2018 16:00', '%d.%m.%Y %H:%M')
-    downloader.download_data()
+    downloader.download()
     print("Number of files = ", len(downloader.binary_data))
