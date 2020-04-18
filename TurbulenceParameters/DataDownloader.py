@@ -47,7 +47,8 @@ class DataDownloader:
                         print(file)
                         self.binary_data.append(requests.get(download_address + file).content)
             else:
-                return print("В папке", download_address, "Фалов нет! ")
+                print("В папке", download_address, "Фалов нет! ")
+                return
 
 
 if __name__ == "__main__":
