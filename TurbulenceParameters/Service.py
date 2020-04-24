@@ -1,3 +1,3 @@
 class Service():
     def __init__(self):
-        pass
+        self.data = np.array([])
