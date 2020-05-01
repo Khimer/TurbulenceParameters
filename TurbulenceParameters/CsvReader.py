@@ -6,7 +6,7 @@ class CsvReader():
         pass
 
     def read(self, name):
-        with open(name+'.csv', newline='') as f:
+        with open(name, newline='') as f:
             reader = csv.reader(f)
             data = list(reader)
             for raw in range(1, len(data)):

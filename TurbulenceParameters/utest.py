@@ -101,7 +101,7 @@ class CommonTest(unittest.TestCase):
         self.assertIn('test_file.csv', os.listdir(path="."))
 
         reader = CsvReader()
-        self.assertEqual(reader.read('test_file').shape[0], 7)
+        self.assertEqual(reader.read('test_file.csv').shape[0], 7)
 
 
 
