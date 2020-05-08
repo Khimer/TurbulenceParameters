@@ -8,7 +8,7 @@ from TurbulenceParameters.DataAggregator import *
 
 class Service:
     def __init__(self):
-        self.data = 0
+        self.data = np.array([])
         self.connection = 0
         self.availableTimeStart = 0
         self.availableTimeEnd = 0
@@ -39,11 +39,15 @@ class Service:
             time_date = datetime.strptime(
                 file[2:4] + '.' + file[:2] + '.20' + file[-3:-1] + ' ' + file[4:6] + ':' + file[6:8], '%d.%m.%Y %H:%M')
             return time_date
-
-        if requests.get('http://amk030.imces.ru/meteodata/AMK_030_BIN/').status_code == 200:
-            self.connection = 1
-            self.availableTimeStart = get_time(0)
-            self.availableTimeEnd = get_time(-1)
+        try:
+            if requests.get('http://amk030.imces.ru/meteodata/AMK_030_BIN/').status_code == 200:
+                self.connection = 1
+                self.availableTimeStart = get_time(0)
+                self.availableTimeEnd = get_time(-1)
+            else:
+                self.connection = 0
+        except requests.exceptions.ConnectionError:
+            self.connection = 0
 
     def set_time_range(self, time_range):
         self.downloader.start_datetime = time_range[0]
@@ -64,8 +68,8 @@ class Service:
 
     def download_data(self):
         self.downloader.download()
-        self.data = self.parser.parse(downloader.binary_data[0])
-        for binary_file in downloader.binary_data[1:]:
+        self.data = self.parser.parse(self.downloader.binary_data[0])
+        for binary_file in self.downloader.binary_data[1:]:
             self.data = np.append(self.data, self.parser.parse(binary_file), axis=1)
 
     def aggregate_data(self):
