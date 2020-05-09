@@ -100,11 +100,9 @@ class CommonTest(unittest.TestCase):
         writer.save_csv(aggregated_data, 'test_file')
         self.assertIn('test_file.csv', os.listdir(path="."))
 
-        reader = CsvReader()
-        self.assertEqual(reader.read('test_file.csv').shape[0], 7)
+        reader_tmp = CsvReader()
+        self.assertEqual(reader_tmp.read('test_file.csv').shape[0], 7)
 
 
-
-
-# if __name__ == "__main__":
-#     unittest.main()
+if __name__ == "__main__":
+    unittest.main()

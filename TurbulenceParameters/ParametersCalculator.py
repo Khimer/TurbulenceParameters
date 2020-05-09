@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class ParametersCalculator():
+class ParametersCalculator:
     def __init__(self):
         self.constants = [0.0125, 331, 1.225, 1]
 
@@ -20,8 +20,8 @@ class ParametersCalculator():
         module_of_the_average_wind_speed_vector = (np.mean(data[1]) ** 2 + np.mean(data[2]) ** 2 + np.mean(
             data[3]) ** 2) ** 0.5
         # Относительная интенсивность флуктуаций скорости ветра
-        relative_intensity_of_fluctuations_in_wind_speed = total_energy_of_turbulent_movements / \
-                                                           module_of_the_average_wind_speed_vector ** 2
+        relative_intensity_of_fluctuations_in_wind_speed = total_energy_of_turbulent_movements \
+                                                           / module_of_the_average_wind_speed_vector ** 2
         # Энергия температурных флуктуаций
         energy_of_temperature_fluctuations = (np.sum((data[0] - np.mean(data[0])) ** 2) / (len(data[0]) - 1)) / 2
         # Пульсация южного компонента ветра
@@ -39,7 +39,7 @@ class ParametersCalculator():
         # Вертикальный поток тепла
         vertical_heat_flow = cp * p * heat_flow_moment
         # Скорость трения (масштаб ветра)
-        friction_speed = (-(pulse_flow_moment)) ** 0.5
+        friction_speed = (abs(pulse_flow_moment)) ** 0.5
         # Масштаб температуры
         temperature_scale = -heat_flow_moment / friction_speed
         # Масштаб Монина-Обухова
@@ -63,8 +63,8 @@ class ParametersCalculator():
         # Структурная постоянная ветровых флуктуаций
         structural_constant_of_wind_fluctuations = np.mean((ripple_of_the_southern_component[1::1] -
                                                             ripple_of_the_southern_component[
-                                                            0:len(ripple_of_the_southern_component) - 1:1]) ** 2) / \
-                                                   (module_of_the_average_wind_speed_vector * dt) ** (-2 / 3)
+                                                            0:len(ripple_of_the_southern_component) - 1:1]) ** 2) \
+                                                   / (module_of_the_average_wind_speed_vector * dt) ** (-2 / 3)
         # Структурная постоянная флуктуаций акустического показателя п реломления
         structural_constant_of_fluctuations_of_the_acoustic_refractive_index = \
             structural_constant_of_temperature_fluctuations / \

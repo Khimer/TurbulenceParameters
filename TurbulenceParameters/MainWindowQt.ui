@@ -50,7 +50,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Подтвердить</string>
     </property>
    </widget>
    <widget class="QComboBox" name="comboBox">
@@ -302,7 +302,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Подтвердить</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">

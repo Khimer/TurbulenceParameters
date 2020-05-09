@@ -43,15 +43,20 @@ class MainWindow(QtWidgets.QMainWindow):
                                 + " " + self.ui.lineEdit_2.text())
 
     def submit_range(self):
-        start_time = datetime.strptime(self.ui.label_3.text(), '%d.%m.%Y %H:%M')
-        end_time = datetime.strptime(self.ui.label_4.text(), '%d.%m.%Y %H:%M')
-        if end_time > start_time:
-            self.service.set_time_range([start_time, end_time])
-            self.ui.label_5.setText(self.ui.label_3.text() + ' - ' + self.ui.label_4.text())
-            self.download_permission_flag = 1
+        if self.ui.label_3.text() and self.ui.label_4.text():
+            start_time = datetime.strptime(self.ui.label_3.text(), '%d.%m.%Y %H:%M')
+            end_time = datetime.strptime(self.ui.label_4.text(), '%d.%m.%Y %H:%M')
+            if end_time > start_time:
+                self.service.set_time_range([start_time, end_time])
+                self.ui.label_5.setText(self.ui.label_3.text() + ' - ' + self.ui.label_4.text())
+                self.download_permission_flag = 1
+            else:
+                self.ui.label_5.setWordWrap(True)
+                self.ui.label_5.setText('ОШИБКА! ДАТА НАЧАЛА ИЗМЕРЕНИЙ БОЛЬШЕ ДАТЫ ОКОНЧАНИЯ!')
+                self.download_permission_flag = 0
         else:
             self.ui.label_5.setWordWrap(True)
-            self.ui.label_5.setText('ОШИБКА! ДАТА НАЧАЛА ИЗМЕРЕНИЙ БОЛЬШЕ ДАТЫ ОКОНЧАНИЯ!')
+            self.ui.label_5.setText('ОШИБКА! ПЕРИОД ИЗМЕРЕНИЙ НЕ УКАЗАН!')
             self.download_permission_flag = 0
 
     def download(self):
@@ -66,14 +71,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.label_8.setText('ОШИБКА! Отсутствует подключение к серверу или неправильно указан диапазон')
 
     def aggregate(self):
-        if self.service.data.shape[0] != 0:
+        if self.service.data.shape[0] != 0 and int(self.ui.lineEdit_3.text()):
             self.service.aggregator.amountAggregatedData = int(self.ui.lineEdit_3.text())
             self.service.aggregate_data()
             self.ui.label_20.setStyleSheet("color: rgb(0, 0, 0);")
             self.ui.label_20.setText('Усреднение завершено!')
         else:
             self.ui.label_20.setStyleSheet("color: rgb(255, 0, 0);")
-            self.ui.label_20.setText('Нет данных для усреднения!')
+            self.ui.label_20.setText('Нет данных для усреднения или неверно указан n!')
 
     def write(self):
         if self.service.data.shape[0] != 0:
@@ -113,7 +118,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.label_9.setText('Файл не выбран!')
 
 
-app = QtWidgets.QApplication([])
-application = MainWindow()
-application.show()
-sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+    application = MainWindow()
+    application.show()
+    sys.exit(app.exec())

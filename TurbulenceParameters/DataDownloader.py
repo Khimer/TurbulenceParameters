@@ -21,20 +21,20 @@ class DataDownloader:
                 for year_folder in folders:
                     if 'T' in year_folder[6:-2]:  # For TMP files
                         if int(year_folder[6:-2][4:]) == self.end_datetime.year:
-                            print(year_folder[6:-2][4:])
+                            #print(year_folder[6:-2][4:])
                             self.download(download_address + year_folder[6:-1])
                     elif self.start_datetime.year <= int(year_folder[6:-2]) <= self.end_datetime.year:
-                        print(year_folder[6:-2])
+                        #print(year_folder[6:-2])
                         self.download(download_address + year_folder[6:-1])
             else:
                 for month_folder in folders:
-                    print(month_folder[6:-1])
+                    #print(month_folder[6:-1])
                     self.download(download_address + month_folder[6:-1])
 
         else:
             pattern = r"(href=\"[\d\w.]*B\")"  # для файлов
             files = re.findall(pattern, answer.text)
-            print(len(files))
+            #print(len(files))
             if files:
                 for file in files:
                     file = file[6:-1]
@@ -44,7 +44,7 @@ class DataDownloader:
                     if file_date > self.end_datetime:
                         return
                     if file_date >= self.start_datetime:
-                        print(file)
+                        #print(file)
                         self.binary_data.append(requests.get(download_address + file).content)
             else:
                 print("В папке", download_address, "Фалов нет! ")

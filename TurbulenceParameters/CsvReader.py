@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 
+
 class CsvReader():
     def __init__(self):
         pass
@@ -13,6 +14,7 @@ class CsvReader():
                 data[raw] = [float(x) for x in data[raw]]
             data = np.array(data[1:]).T
             return data
+
 
 if __name__ == "__main__":
     reader = CsvReader()

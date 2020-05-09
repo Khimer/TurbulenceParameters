@@ -30,7 +30,6 @@ class Service:
             if index == 0:
                 answer = requests.get(position)
                 folders = re.findall(pattern, answer.text)
-                print(folders)
                 position = position + folders[index][6:-2]
             answer = requests.get(position)
             pattern = r"(href=\"[\d\w.]*B\")"  # для файлов
