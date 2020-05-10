@@ -21,6 +21,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.ui.label_5.setWordWrap(True)
             self.ui.label_19.setText('ПОДКЛЮЧЕНИЕ К СЕРВЕРУ ОТСУТСТВУЕТ')
+        self.ui.lineEdit.setMaxLength(5)
+        self.ui.lineEdit_2.setMaxLength(5)
         self.ui.pushButton.clicked.connect(self.set_start_of_range)
         self.ui.pushButton_2.clicked.connect(self.set_end_of_range)
         self.ui.pushButton_3.clicked.connect(self.submit_range)
@@ -43,7 +45,15 @@ class MainWindow(QtWidgets.QMainWindow):
                                 + " " + self.ui.lineEdit_2.text())
 
     def submit_range(self):
-        if self.ui.label_3.text() and self.ui.label_4.text():
+        def check_text(text):
+            try:
+                return (0 <= int(text[-5:-3]) <= 23) and (0 <= int(text[-2:]) <= 59) and (text[-3] == ':')
+            except ValueError:
+                return 0
+            except IndexError:
+                return 0
+
+        if check_text(self.ui.label_3.text()) and check_text(self.ui.label_4.text()):
             start_time = datetime.strptime(self.ui.label_3.text(), '%d.%m.%Y %H:%M')
             end_time = datetime.strptime(self.ui.label_4.text(), '%d.%m.%Y %H:%M')
             if end_time > start_time:
@@ -56,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.download_permission_flag = 0
         else:
             self.ui.label_5.setWordWrap(True)
-            self.ui.label_5.setText('ОШИБКА! ПЕРИОД ИЗМЕРЕНИЙ НЕ УКАЗАН!')
+            self.ui.label_5.setText('ОШИБКА! ПЕРИОД ИЗМЕРЕНИЙ УКАЗАН НЕ ВЕРНО!')
             self.download_permission_flag = 0
 
     def download(self):
@@ -90,17 +100,22 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.label_21.setText('Нет данных для сохранения!')
 
     def calculate(self):
-        if self.service.data.shape[0] != 0:
-            self.service.calculator.constants = [float(self.ui.lineEdit_5.text()), float(self.ui.lineEdit_4.text()),
-                                                 float(self.ui.lineEdit_6.text()), float(self.ui.lineEdit_7.text())]
-            row = 0
-            for parameter in self.service.calculate_turbulence_parameters():
-                cellinfo = QTableWidgetItem(str(round(parameter, 5)))
-                self.ui.tableWidget.setItem(row, 0, cellinfo)
-                row += 1
-        else:
-            self.ui.label_22.setStyleSheet("color: rgb(255, 0, 0);")
-            self.ui.label_22.setText('Нет данных для расчета!')
+        try:
+            if self.service.data.shape[0] != 0:
+                self.service.calculator.constants = [float(self.ui.lineEdit_5.text()), float(self.ui.lineEdit_4.text()),
+                                                     float(self.ui.lineEdit_6.text()), float(self.ui.lineEdit_7.text())]
+                row = 0
+                for parameter in self.service.calculate_turbulence_parameters():
+                    cellinfo = QTableWidgetItem(str(round(parameter, 5)))
+                    self.ui.tableWidget.setItem(row, 0, cellinfo)
+                    row += 1
+                self.ui.label_23.clear()
+            else:
+                self.ui.label_22.setStyleSheet("color: rgb(255, 0, 0);")
+                self.ui.label_22.setText('Нет данных для расчета!')
+        except ValueError:
+            self.ui.label_23.setStyleSheet("color: rgb(255, 0, 0);")
+            self.ui.label_23.setText('ПЕРЕМЕННЫЕ УКАЗАНЫ НЕКОРРЕКТНО!')
 
     def update_list_files(self):
         self.ui.comboBox.clear()

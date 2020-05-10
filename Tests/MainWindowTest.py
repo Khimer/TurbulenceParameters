@@ -5,7 +5,6 @@ import unittest
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
-
 from TurbulenceParameters.MainWindow import *
 
 app = QApplication(sys.argv)
