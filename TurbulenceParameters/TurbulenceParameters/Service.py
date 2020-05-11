@@ -1,9 +1,9 @@
-from TurbulenceParameters.BytesParser import *
-from TurbulenceParameters.DataDownloader import *
-from TurbulenceParameters.ParametersCalculator import *
-from TurbulenceParameters.CsvWriter import *
-from TurbulenceParameters.CsvReader import *
-from TurbulenceParameters.DataAggregator import *
+from .BytesParser import *
+from .DataDownloader import *
+from .ParametersCalculator import *
+from .CsvWriter import *
+from .CsvReader import *
+from .DataAggregator import *
 
 
 class Service:
@@ -60,7 +60,7 @@ class Service:
 
     def get_list_files(self):
         csv_files = []
-        for file in os.listdir(path="."):
+        for file in os.listdir(path="TurbulenceParameters/Data/"):
             if '.csv' in file:
                 csv_files.append(file)
         return csv_files

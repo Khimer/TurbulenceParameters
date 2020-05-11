@@ -8,12 +8,12 @@ class BytesParser():
         pass
 
     def parse(self, binary_file):
-        with open('temporary_file.19B', 'wb') as file:  # Запись бинарных данных в файл
+        with open('TurbulenceParameters/Data/temporary_file.19B', 'wb') as file:  # Запись бинарных данных в файл
             file.write(binary_file)
-        end_data_place = os.path.getsize('temporary_file.19B') - 14  # Конец расположения данных в файле
+        end_data_place = os.path.getsize('TurbulenceParameters/Data/temporary_file.19B') - 14  # Конец расположения данных в файле
         number_of_measurements = (end_data_place - 17) // 13
         tmp_data = np.ones((7, number_of_measurements))
-        with open('temporary_file.19B', 'rb') as binary:
+        with open('TurbulenceParameters/Data/temporary_file.19B', 'rb') as binary:
             #print("Файл открыт")
             year_start = int.from_bytes(binary.read(2), byteorder='little')
             if year_start <= int(time.strftime("%Y", time.localtime())):

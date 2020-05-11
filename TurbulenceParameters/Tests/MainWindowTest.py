@@ -5,13 +5,12 @@ import unittest
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
-from TurbulenceParameters.MainWindow import *
+from ..TurbulenceParameters.MainWindow import *
 
 app = QApplication(sys.argv)
 
 
 class MainWindowTest(unittest.TestCase):
-    '''Test the margarita mixer GUI'''
 
     def setUp(self):
         '''Create the GUI'''
@@ -67,6 +66,9 @@ class MainWindowTest(unittest.TestCase):
             self.form.ui.comboBox.setCurrentIndex(0)
             QTest.mouseClick(self.form.ui.pushButton_5, Qt.LeftButton)
             self.assertEqual(self.form.ui.label_9.text(), 'Загрузка завершена!')
+
+            os.remove('TurbulenceParameters/Data/01.01.2018 01.00-01.01.2018 01.35.csv')
+            os.remove('TurbulenceParameters/Data/temporary_file.19B')
         else:
             QTest.mouseClick(self.form.ui.pushButton_4, Qt.LeftButton)
             self.assertEqual(self.form.ui.label_8.text(), 'ОШИБКА! Отсутствует подключение к серверу '
