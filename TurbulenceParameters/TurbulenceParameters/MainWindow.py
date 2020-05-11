@@ -1,5 +1,5 @@
-from TurbulenceParameters.MainWindowQt import Ui_MainWindow
-from TurbulenceParameters.Service import *
+from .MainWindowQt import Ui_MainWindow
+from .Service import *
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
@@ -134,7 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-    application = MainWindow()
-    application.show()
-    sys.exit(app.exec())
+	app = QtWidgets.QApplication([])
+	application = MainWindow()
+	application.show()
+	sys.exit(app.exec())
