@@ -24,7 +24,7 @@ subsequent calculation of turbulence parameters based on them.
 
   urllib3==1.25.8
 
-# Using
+# Installation and launch
   Download the file from the link and install in the desired folder (only Windows)
   
   https://drive.google.com/open?id=1fIo3pAIReOi1Au9FZ5SbrSDIfjOLqPxw
